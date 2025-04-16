@@ -27,7 +27,7 @@ type apiClientMocked struct {
 	version        string
 }
 
-func (a *apiClientMocked) GetGitExecute(_ context.Context, _ string, _ string) (*git.Instance, error) {
+func (a *apiClientMocked) GetGitExecute(_ context.Context, _, _ string) (*git.Instance, error) {
 	if a.getFails {
 		return nil, &oapierror.GenericOpenAPIError{
 			StatusCode: http.StatusInternalServerError,
@@ -44,7 +44,6 @@ func (a *apiClientMocked) GetGitExecute(_ context.Context, _ string, _ string) (
 		Url:     utils.Ptr(a.url),
 		Version: utils.Ptr(a.version),
 	}, nil
-
 }
 
 func TestCreateGitInstanceWaitHandler(t *testing.T) {
@@ -172,8 +171,6 @@ func TestCreateGitInstanceWaitHandler(t *testing.T) {
 		})
 	}
 }
-
-// Create a function TestDeleteGitInstanceWaitHandler
 
 func TestDeleteGitInstanceWaitHandler(t *testing.T) {
 	tests := []struct {

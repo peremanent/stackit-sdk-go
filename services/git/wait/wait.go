@@ -22,12 +22,10 @@ type APIClientInterface interface {
 
 func CreateGitInstanceWaitHandler(ctx context.Context, a APIClientInterface, projectId, instanceId string) *wait.AsyncActionHandler[git.Instance] {
 	handler := wait.New(func() (waitFinished bool, response *git.Instance, err error) {
-		//crete the handler of the async action
 		instance, err := a.GetGitExecute(ctx, projectId, instanceId)
 		if err != nil {
 			return false, nil, err
 		}
-		//Check if the instance.Id is empty
 		if *instance.Id == "" || *instance.State == "" {
 			return false, nil, fmt.Errorf("could not get Instance id or State from response for project %s and instanceId %s", projectId, instanceId)
 		}
@@ -45,7 +43,6 @@ func CreateGitInstanceWaitHandler(ctx context.Context, a APIClientInterface, pro
 
 func DeleteGitInstanceWaitHandler(ctx context.Context, a APIClientInterface, projectId, instanceId string) *wait.AsyncActionHandler[git.Instance] {
 	handler := wait.New(func() (waitFinished bool, response *git.Instance, err error) {
-		//create the handler of the async action
 		instance, err := a.GetGitExecute(ctx, projectId, instanceId)
 		if err != nil {
 			return true, nil, err
@@ -53,7 +50,6 @@ func DeleteGitInstanceWaitHandler(ctx context.Context, a APIClientInterface, pro
 		if instance != nil {
 			return true, instance, nil
 		}
-		//If there is no instance, it means it was deleted successfully
 		return true, nil, nil
 	})
 	handler.SetTimeout(10 * time.Minute)
